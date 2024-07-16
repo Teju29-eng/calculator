@@ -1,0 +1,27 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'main'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Dependencies and Test
+      run: |
+        npm install
+        npm test
+      if: github.event_name != 'workflow_dispatch' || github.event.inputs.branch == 'main'
